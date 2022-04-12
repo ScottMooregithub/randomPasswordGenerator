@@ -14,18 +14,30 @@ const uppercaseletters = lowercaseletters.map((letter) => letter.toUpperCase());
 console.log(uppercaseletters);
 
 var generatePassword = function () {
-  console.log("button clicked!");
-
-  //prompt use whehter or not lowercase, uppercase, numeric, and/or special characters
-  //validate input
-
-  const allCharacters = [number, symbols, lowercaseletters, uppercaseletters];
-  //return is necessary to pass the result of generatePassword into writePassword function
-  return allCharacters;
+  var lengthPrompt = getPasswordLength();
+  var passwordCharacters = getPasswordOption();
+  var randomPassword = "";
+  for (i = 0; i < lengthPrompt; i++) {
+    randomPassword =
+      randomPassword +
+      passwordCharacters[Math.floor(Math.random() * passwordCharacters.length)];
+  }
+  console.log(randomPassword);
+  return randomPassword;
 };
-//dont forget () at end of generatePassword
-//display on page
-console.log(generatePassword());
+
+var getPasswordLength = function () {
+  var typedLength = window.prompt(
+    "Please choose a password length between 8 and 128 characters"
+  );
+  var isLengthGood = isPasswordLengthValid(typedLength);
+  if (isLengthGood === true) {
+    return typedLength;
+  } else {
+    var newLength = getPasswordLength();
+    return newLength;
+  }
+};
 
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
@@ -34,26 +46,35 @@ var generateBtn = document.querySelector("#generate");
 function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
-  getPasswordLength();
 
   passwordText.value = password;
 }
 
-var getPasswordLength = function () {
-  var lengthPrompt = window.prompt(
-    " Password must be a minimum of 8 characters in length and a maximum of 128 characters in lenght"
-  );
-
-  // setting a variable called isValid equal to the result of calling
-  // isPasswordLengthValid with a value of lengthPrompt
-  // (lengthPrompt is what the user just typed in)
-  var isValid = isPasswordLengthValid(lengthPrompt);
-  console.log(isValid);
-  if (isValid) {
-    return lengthPrompt;
-  } else {
-    return getPasswordLength();
+var getPasswordOption = function () {
+  var passwordCharacters = [];
+  // google confirm statement
+  var hasNumbers = confirm("would you like to include numbers");
+  if (hasNumbers) {
+    passwordCharacters = passwordCharacters.concat(number);
+    console.log(passwordCharacters);
   }
+  // google concat
+  var specialCharacters = confirm("would you like to use special characters");
+  if (specialCharacters) {
+    passwordCharacters = passwordCharacters.concat(symbols);
+    console.log(passwordCharacters);
+  }
+  var lowerCaseOption = confirm("woudl you like to use lowercase letters");
+  if (lowerCaseOption) {
+    passwordCharacters = passwordCharacters.concat(lowercaseletters);
+    console.log(passwordCharacters);
+  }
+  var upperCaseOption = confirm("would you like to use uppercase letters");
+  if (upperCaseOption) {
+    passwordCharacters = passwordCharacters.concat(uppercaseletters);
+    console.log(passwordCharacters);
+  }
+  return passwordCharacters;
 };
 
 // this is a function that accepts a paraemeter called password length and
@@ -67,9 +88,6 @@ var isPasswordLengthValid = function (passwordLength) {
   }
   return true;
 };
-// document.getElementById("generate").onclick = function(){
-//   alert("Password must be a minimum of 8 characters or a maximum of 28 characters long")
-// }
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
